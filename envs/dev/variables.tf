@@ -3,8 +3,8 @@ variable "aws_region" {
   type        = string
 }
 
-variable "project" {
-  description = "Project name prefix"
+variable "project_name" {
+  description = "Project name"
   type        = string
 }
 
@@ -13,7 +13,7 @@ variable "environment" {
   type        = string
 }
 
-variable "github_org" {
+variable "github_owner" {
   description = "GitHub organization or username"
   type        = string
 }
@@ -26,5 +26,4 @@ variable "github_repo" {
 variable "github_branch" {
   description = "GitHub branch allowed to assume AWS role"
   type        = string
-  default     = "main"
 }

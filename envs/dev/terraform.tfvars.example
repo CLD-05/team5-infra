@@ -1,0 +1,7 @@
+aws_region   = "ap-northeast-2"
+project_name = "your-project-name"
+environment  = "dev"
+
+github_owner  = "your-github-org-or-username"
+github_repo   = "your-app-repository-name"
+github_branch = "dev"

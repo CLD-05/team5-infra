@@ -1,8 +1,8 @@
 locals {
-  name_prefix = "${var.project}-${var.environment}"
+  name_prefix = "team5-${var.project_name}-${var.environment}"
 
   common_tags = {
-    Project     = var.project
+    Project     = var.project_name
     Environment = var.environment
     Team        = "team5"
     ManagedBy   = "terraform"
@@ -20,12 +20,15 @@ module "ecr" {
 module "github_oidc_role" {
   source = "../../modules/github-oidc-role"
 
-  name_prefix = local.name_prefix
-  role_name   = "${local.name_prefix}-github-actions-role"
+  project_name = var.project_name
+  role_name    = "${local.name_prefix}-github-actions-role"
 
-  github_org    = var.github_org
-  github_repo   = var.github_repo
-  github_branch = var.github_branch
+  # dev에서 GitHub OIDC Provider 최초 생성
+  create_oidc_provider = true
+
+  github_sub_conditions = [
+    "repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/dev"
+  ]
 
   ecr_repository_arns = [
     module.ecr.repository_arn
