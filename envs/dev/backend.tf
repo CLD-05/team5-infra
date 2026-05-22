@@ -1,10 +1,9 @@
 terraform {
   backend "s3" {
-    bucket         = "team5-petcarelog-terraform-cld05-state"
-    key            = "envs/dev/terraform.tfstate"
+    bucket         = "tfstate-lionkdt5-team5"
+    key            = "project2/terraform.tfstate"
     region         = "ap-northeast-2"
-    dynamodb_table = "team5-petcarelog-terraform-lock"
+    dynamodb_table = "tfstate-lock-team5"
     encrypt        = true
-
   }
 }
