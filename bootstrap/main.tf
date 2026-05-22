@@ -37,7 +37,7 @@ resource "aws_s3_bucket_versioning" "backend" {
   }
 }
 
-# 서버측 암호화 — KMS로 State 보호
+# 서버측 암호화 — AES로 State 보호
 resource "aws_s3_bucket_server_side_encryption_configuration" "backend" {
   bucket = aws_s3_bucket.backend.id
 
