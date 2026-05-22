@@ -9,13 +9,13 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-northeast-2"
+  region = var.aws_region
 
   default_tags {
     tags = {
-      Project   = "terraform-study"
-      ManagedBy = "terraform"
-      Purpose   = "backend-bootstrap"
+      Project   = var.project
+      ManagedBy = var.managed_by
+      Purpose   = var.purpose
     }
   }
 }
@@ -24,7 +24,7 @@ data "aws_caller_identity" "current" {}
 
 # S3 버킷 — State 저장소
 resource "aws_s3_bucket" "backend" {
-  bucket = "team5-petcarelog-terraform-state"
+  bucket = var.state_bucket_name
 
   tags = { Name = "terraform-backend" }
 }
@@ -59,7 +59,7 @@ resource "aws_s3_bucket_public_access_block" "backend" {
 
 # DynamoDB 테이블 — State Lock
 resource "aws_dynamodb_table" "lock" {
-  name         = "team5-petcarelog-terraform-lock"
+  name         = var.lock_table_name
   hash_key     = "LockID"
   billing_mode = "PAY_PER_REQUEST"
 
