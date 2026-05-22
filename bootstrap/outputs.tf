@@ -1,9 +1,9 @@
-output "bucket_name" {
+output "state_bucket_name" {
   description = "Backend S3 버킷 이름"
-  value       = aws_s3_bucket.backend.bucket
+  value       = aws_s3_bucket.terraform_state.bucket
 }
 
-output "dynamodb_table" {
+output "lock_table_name" {
   description = "Lock DynamoDB 테이블 이름"
-  value       = aws_dynamodb_table.lock.name
+  value       = aws_dynamodb_table.terraform_lock.name
 }
