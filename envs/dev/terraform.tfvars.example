@@ -55,8 +55,8 @@ enable_nat_gateway = true
 
 # dev에서는 비용 절감을 위해 true로 바꿀 수 있음
 # true  = NAT Gateway 1개
-# false = AZ별 NAT Gateway 생성
-single_nat_gateway = false
+# false = AZ별 NAT Gateway 생성 (dev 환경은 true)
+single_nat_gateway = true
 
 # ------------------------------------------------------------------------------
 # Bastion
