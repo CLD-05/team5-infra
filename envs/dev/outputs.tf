@@ -12,7 +12,6 @@ output "github_actions_role_arn" {
   description = "GitHub Actions IAM Role ARN"
   value       = module.github_oidc_role.role_arn
 }
-<<<<<<< HEAD
 output "eks_cluster_name" {
   description = "EKS cluster name"
   value       = module.eks.eks_cluster_name
@@ -38,7 +37,6 @@ output "eks_node_group_name" {
   description = "EKS managed node group name"
   value       = module.eks.eks_node_group_name
 }
-=======
 
 # ------------------------------------------------------------------------------
 # Network
@@ -78,4 +76,3 @@ output "nat_gateway_ids" {
   description = "NAT Gateway IDs"
   value       = module.network.nat_gateway_ids
 }
->>>>>>> develop
