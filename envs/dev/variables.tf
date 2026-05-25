@@ -27,3 +27,8 @@ variable "github_branch" {
   description = "GitHub branch allowed to assume AWS role"
   type        = string
 }
+variable "eks_cluster_version" {
+  description = "Kubernetes version for EKS cluster"
+  type        = string
+  default     = "1.29"
+}
