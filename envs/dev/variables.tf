@@ -82,33 +82,33 @@ variable "single_nat_gateway" {
   default     = false
 }
 
-# # ------------------------------------------------------------------------------
-# # Bastion
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# Bastion
+# ------------------------------------------------------------------------------
 
-# variable "enable_bastion" {
-#   description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
-#   type        = bool
-#   default     = false
-# }
+variable "enable_bastion" {
+  description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
+  type        = bool
+  default     = false
+}
 
-# variable "bastion_instance_type" {
-#   description = "EC2 instance type for Bastion Host"
-#   type        = string
-#   default     = "t3.micro"
-# }
+variable "bastion_instance_type" {
+  description = "EC2 instance type for Bastion Host"
+  type        = string
+  default     = "t3.micro"
+}
 
-# variable "bastion_allowed_ssh_cidrs" {
-#   description = "CIDR blocks allowed to access Bastion Host through SSH"
-#   type        = list(string)
-#   default     = []
-# }
+variable "bastion_allowed_ssh_cidrs" {
+  description = "CIDR blocks allowed to access Bastion Host through SSH"
+  type        = list(string)
+  default     = []
+}
 
-# variable "bastion_key_name" {
-#   description = "EC2 key pair name for Bastion Host SSH access"
-#   type        = string
-#   default     = null
-# }
+variable "bastion_key_name" {
+  description = "EC2 key pair name for Bastion Host SSH access"
+  type        = string
+  default     = null
+}
 
 # # ------------------------------------------------------------------------------
 # # RDS
