@@ -12,6 +12,7 @@ output "github_actions_role_arn" {
   description = "GitHub Actions IAM Role ARN"
   value       = module.github_oidc_role.role_arn
 }
+<<<<<<< HEAD
 output "eks_cluster_name" {
   description = "EKS cluster name"
   value       = module.eks.eks_cluster_name
@@ -37,3 +38,44 @@ output "eks_node_group_name" {
   description = "EKS managed node group name"
   value       = module.eks.eks_node_group_name
 }
+=======
+
+# ------------------------------------------------------------------------------
+# Network
+# ------------------------------------------------------------------------------
+
+output "vpc_id" {
+  description = "VPC ID"
+  value       = module.network.vpc_id
+}
+
+output "vpc_cidr_block" {
+  description = "VPC CIDR block"
+  value       = module.network.vpc_cidr_block
+}
+
+output "internet_gateway_id" {
+  description = "Internet Gateway ID"
+  value       = module.network.internet_gateway_id
+}
+
+output "public_subnet_ids" {
+  description = "Public subnet IDs"
+  value       = module.network.public_subnet_ids
+}
+
+output "private_app_subnet_ids" {
+  description = "Private app subnet IDs"
+  value       = module.network.private_app_subnet_ids
+}
+
+output "private_db_subnet_ids" {
+  description = "Private DB subnet IDs"
+  value       = module.network.private_db_subnet_ids
+}
+
+output "nat_gateway_ids" {
+  description = "NAT Gateway IDs"
+  value       = module.network.nat_gateway_ids
+}
+>>>>>>> develop

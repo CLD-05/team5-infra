@@ -1,14 +1,3 @@
-locals {
-  name_prefix = "team5-${var.project_name}-${var.environment}"
-
-  common_tags = {
-    Project     = var.project_name
-    Environment = var.environment
-    ManagedBy   = "terraform"
-    Team        = "team5"
-  }
-}
-
 module "ecr" {
   source = "../../modules/ecr"
 
@@ -58,6 +47,21 @@ module "eks" {
   node_group_min_size       = 1
   node_group_max_size       = 3
   node_group_disk_size      = 20
+
+  tags = local.common_tags
+}
+module "network" {
+  source = "../../modules/network"
+
+  name_prefix              = local.name_prefix
+  vpc_cidr                 = var.vpc_cidr
+  availability_zones       = var.availability_zones
+  public_subnet_cidrs      = var.public_subnet_cidrs
+  private_app_subnet_cidrs = var.private_app_subnet_cidrs
+  private_db_subnet_cidrs  = var.private_db_subnet_cidrs
+
+  enable_nat_gateway = var.enable_nat_gateway
+  single_nat_gateway = var.single_nat_gateway
 
   tags = local.common_tags
 }
