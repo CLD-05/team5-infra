@@ -89,7 +89,7 @@ variable "single_nat_gateway" {
 variable "enable_bastion" {
   description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
   type        = bool
-  default     = false
+  default     = false  # dev 환경은 true이고 prod 환경은 false
 }
 
 # variable "bastion_instance_type" {
