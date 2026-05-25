@@ -73,3 +73,16 @@ module "eks" {
     module.security_group
   ]
 }
+
+module "eks_addons" {
+  source = "../../modules/eks-addons"
+
+  eks_cluster_name = module.eks.eks_cluster_name
+  eks_addons       = var.eks_addons
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks
+  ]
+}

@@ -249,19 +249,19 @@ variable "node_group_disk_size" {
 # # EKS Add-ons
 # # ------------------------------------------------------------------------------
 
-# variable "enable_eks_addons" {
-#   description = "Whether to enable default EKS add-ons"
-#   type        = bool
-#   default     = true
-# }
+variable "enable_eks_addons" {
+  description = "Whether to enable default EKS add-ons"
+  type        = bool
+  default     = true
+}
 
-# variable "eks_addons" {
-#   description = "List of EKS add-ons to install"
-#   type        = list(string)
-#   default = [
-#     "vpc-cni",
-#     "coredns",
-#     "kube-proxy",
-#     "eks-pod-identity-agent"
-#   ]
-# }
+variable "eks_addons" {
+  description = "List of EKS add-ons to install"
+  type        = list(string)
+  default = [
+    "vpc-cni",
+    "coredns",
+    "kube-proxy",
+    "eks-pod-identity-agent"
+  ]
+}
