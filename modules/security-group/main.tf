@@ -62,6 +62,19 @@ resource "aws_security_group_rule" "eks_cluster_ingress_from_node_https" {
   protocol  = "tcp"
 }
 
+resource "aws_security_group_rule" "eks_cluster_ingress_from_bastion_https" {
+  count = var.enable_bastion ? 1 : 0
+
+  type                     = "ingress"
+  description              = "Allow Bastion Host to access EKS cluster API"
+  security_group_id        = aws_security_group.eks_cluster.id
+  source_security_group_id = aws_security_group.bastion[0].id
+
+  from_port = 443
+  to_port   = 443
+  protocol  = "tcp"
+}
+
 resource "aws_security_group_rule" "eks_cluster_egress_all" {
   type              = "egress"
   description       = "Allow all outbound traffic"
