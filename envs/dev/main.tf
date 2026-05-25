@@ -28,28 +28,6 @@ module "github_oidc_role" {
   tags = local.common_tags
 }
 
-module "eks" {
-  source = "../../modules/eks"
-
-  name_prefix            = local.name_prefix
-  private_app_subnet_ids = module.network.private_app_subnet_ids
-
-  eks_cluster_role_arn = module.security_iam.eks_cluster_role_arn
-  eks_node_role_arn    = module.security_iam.eks_node_role_arn
-
-  eks_cluster_sg_id = module.security_iam.eks_cluster_sg_id
-  eks_node_sg_id    = module.security_iam.eks_node_sg_id
-
-  eks_cluster_version = var.eks_cluster_version
-
-  node_group_instance_types = ["t3.medium"]
-  node_group_desired_size   = 2
-  node_group_min_size       = 1
-  node_group_max_size       = 3
-  node_group_disk_size      = 20
-
-  tags = local.common_tags
-}
 module "network" {
   source = "../../modules/network"
 
@@ -64,4 +42,34 @@ module "network" {
   single_nat_gateway = var.single_nat_gateway
 
   tags = local.common_tags
+}
+
+
+module "eks" {
+  source = "../../modules/eks"
+
+  name_prefix            = local.name_prefix
+  private_app_subnet_ids = module.network.private_app_subnet_ids
+
+  eks_cluster_role_arn = module.security_iam.eks_cluster_role_arn
+  eks_node_role_arn    = module.security_iam.eks_node_role_arn
+
+  eks_cluster_sg_id = module.security_iam.eks_cluster_sg_id
+
+  eks_cluster_version = var.eks_cluster_version
+  eks_endpoint_public_access  = var.eks_endpoint_public_access
+  eks_endpoint_private_access = var.eks_endpoint_private_access
+
+  node_group_instance_types = var.node_group_instance_types
+  node_group_desired_size   = var.node_group_desired_size
+  node_group_min_size       = var.node_group_min_size
+  node_group_max_size       = var.node_group_max_size
+  node_group_disk_size      = var.node_group_disk_size
+
+  tags = local.common_tags
+
+    depends_on = [
+    module.iam,
+    module.security_group
+  ]
 }
