@@ -43,3 +43,13 @@ module "network" {
 
   tags = local.common_tags
 }
+
+module "security_iam" {
+  source = "../../modules/security-iam"
+
+  name_prefix               = local.name_prefix
+  tags                      = local.common_tags
+  vpc_id                    = module.network.vpc_id
+  environment               = var.environment
+  bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
+}

@@ -269,3 +269,9 @@ variable "single_nat_gateway" {
 #     "eks-pod-identity-agent"
 #   ]
 # }
+
+variable "bastion_allowed_ssh_cidrs" {
+  description = "Bastion SSH 허용 CIDR (dev only)"
+  type        = list(string)
+  default     = []
+}
