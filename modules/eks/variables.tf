@@ -22,6 +22,10 @@ variable "eks_cluster_sg_id" {
   description = "Security group ID for EKS cluster"
   type        = string
 }
+variable "eks_node_sg_id" {
+  description = "Security group ID for EKS node group"
+  type        = string
+}
 
 
 
@@ -72,4 +76,15 @@ variable "node_group_disk_size" {
 variable "tags" {
   description = "Common tags"
   type        = map(string)
+}
+variable "petcarelog_namespace" {
+  description = "Kubernetes namespace for PetCareLog"
+  type        = string
+  default     = "petcarelog"
+}
+
+variable "petcarelog_service_account_name" {
+  description = "Kubernetes ServiceAccount name for PetCareLog"
+  type        = string
+  default     = "petcarelog-sa"
 }
