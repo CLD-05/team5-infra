@@ -86,11 +86,11 @@ variable "single_nat_gateway" {
 # # Bastion
 # # ------------------------------------------------------------------------------
 
-# variable "enable_bastion" {
-#   description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
-#   type        = bool
-#   default     = false
-# }
+variable "enable_bastion" {
+  description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
+  type        = bool
+  default     = false  # dev 환경은 true이고 prod 환경은 false
+}
 
 # variable "bastion_instance_type" {
 #   description = "EC2 instance type for Bastion Host"
@@ -98,17 +98,28 @@ variable "single_nat_gateway" {
 #   default     = "t3.micro"
 # }
 
-# variable "bastion_allowed_ssh_cidrs" {
-#   description = "CIDR blocks allowed to access Bastion Host through SSH"
-#   type        = list(string)
-#   default     = []
-# }
+variable "bastion_allowed_ssh_cidrs" {
+  description = "Bastion SSH 허용 CIDR (dev only)"
+  type        = list(string)
+  default     = []
+}
 
 # variable "bastion_key_name" {
 #   description = "EC2 key pair name for Bastion Host SSH access"
 #   type        = string
 #   default     = null
 # }
+
+
+# # ------------------------------------------------------------------------------
+# # APP
+# # ------------------------------------------------------------------------------
+variable "app_port" {
+  description = "Application port"
+  type        = number
+  default     = 8080
+}
+
 
 # # ------------------------------------------------------------------------------
 # # RDS
@@ -154,11 +165,11 @@ variable "single_nat_gateway" {
 #   sensitive   = true
 # }
 
-# variable "db_port" {
-#   description = "Database port"
-#   type        = number
-#   default     = 3306
-# }
+variable "db_port" {
+  description = "Database port"
+  type        = number
+  default     = 3306
+}
 
 # variable "db_multi_az" {
 #   description = "Whether to enable Multi-AZ for RDS"
@@ -269,3 +280,5 @@ variable "single_nat_gateway" {
 #     "eks-pod-identity-agent"
 #   ]
 # }
+
+
