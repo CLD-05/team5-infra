@@ -51,3 +51,21 @@ output "nat_gateway_ids" {
   description = "NAT Gateway IDs"
   value       = module.network.nat_gateway_ids
 }
+
+# ------------------------------------------------------------------------------
+# Bastion Host
+# ------------------------------------------------------------------------------
+output "bastion_instance_id" {
+  description = "Bastion Host instance ID"
+  value       = module.bastion.bastion_instance_id
+}
+
+output "bastion_public_ip" {
+  description = "Bastion Host public IP"
+  value       = module.bastion.bastion_public_ip
+}
+
+output "bastion_private_ip" {
+  description = "Bastion Host private IP"
+  value       = module.bastion.bastion_private_ip
+}

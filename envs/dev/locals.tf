@@ -5,6 +5,6 @@ locals {
     Project     = var.project_name
     Environment = var.environment
     ManagedBy   = "terraform"
-    Team        = "team5"
+    team        = "team5"
   }
 }

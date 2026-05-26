@@ -89,14 +89,14 @@ variable "single_nat_gateway" {
 variable "enable_bastion" {
   description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
   type        = bool
-  default     = false  # dev 환경은 true이고 prod 환경은 false
+  default     = false # dev 환경은 true이고 prod 환경은 false
 }
 
-# variable "bastion_instance_type" {
-#   description = "EC2 instance type for Bastion Host"
-#   type        = string
-#   default     = "t3.micro"
-# }
+variable "bastion_instance_type" {
+  description = "EC2 instance type for Bastion Host"
+  type        = string
+  default     = "t3.micro"
+}
 
 variable "bastion_allowed_ssh_cidrs" {
   description = "Bastion SSH 허용 CIDR (dev only)"
@@ -104,11 +104,11 @@ variable "bastion_allowed_ssh_cidrs" {
   default     = []
 }
 
-# variable "bastion_key_name" {
-#   description = "EC2 key pair name for Bastion Host SSH access"
-#   type        = string
-#   default     = null
-# }
+variable "bastion_key_name" {
+  description = "EC2 key pair name for Bastion Host SSH access"
+  type        = string
+  default     = null
+}
 
 
 # # ------------------------------------------------------------------------------

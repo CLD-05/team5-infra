@@ -47,22 +47,38 @@ module "network" {
 module "security_group" {
   source = "../../modules/security-group"
 
-  name_prefix               = local.name_prefix
-  vpc_id                    = module.network.vpc_id
+  name_prefix = local.name_prefix
+  vpc_id      = module.network.vpc_id
 
   enable_bastion            = var.enable_bastion
   bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
 
-  db_port = var.db_port
+  db_port  = var.db_port
   app_port = var.app_port
 
-  tags                      = local.common_tags
+  tags = local.common_tags
 }
 
 module "iam" {
   source = "../../modules/iam"
 
   name_prefix = local.name_prefix
+
+  tags = local.common_tags
+}
+
+module "bastion" {
+  source = "../../modules/bastion"
+
+  name_prefix = local.name_prefix
+
+  enable_bastion = var.enable_bastion
+
+  public_subnet_id = module.network.public_subnet_ids[0]
+  bastion_sg_id    = module.security_group.bastion_sg_id
+
+  bastion_instance_type = var.bastion_instance_type
+  bastion_key_name      = var.bastion_key_name
 
   tags = local.common_tags
 }
