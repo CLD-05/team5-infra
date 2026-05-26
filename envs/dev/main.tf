@@ -65,3 +65,26 @@ module "network" {
 
   tags = local.common_tags
 }
+
+module "security_group" {
+  source = "../../modules/security-group"
+
+  name_prefix = local.name_prefix
+  vpc_id      = module.network.vpc_id
+
+  enable_bastion            = var.enable_bastion
+  bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
+
+  db_port  = var.db_port
+  app_port = var.app_port
+
+  tags = local.common_tags
+}
+
+module "iam" {
+  source = "../../modules/iam"
+
+  name_prefix = local.name_prefix
+
+  tags = local.common_tags
+}
