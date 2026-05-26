@@ -69,3 +69,58 @@ output "bastion_private_ip" {
   description = "Bastion Host private IP"
   value       = module.bastion.bastion_private_ip
 }
+
+
+# ------------------------------------------------------------------------------
+# RDS / SSM Parameter
+# ------------------------------------------------------------------------------
+output "rds_instance_id" {
+  description = "RDS instance ID"
+  value       = module.rds.rds_instance_id
+}
+
+output "rds_endpoint" {
+  description = "RDS endpoint"
+  value       = module.rds.rds_endpoint
+}
+
+output "rds_address" {
+  description = "RDS address"
+  value       = module.rds.rds_address
+}
+
+output "rds_port" {
+  description = "RDS port"
+  value       = module.rds.rds_port
+}
+
+output "rds_db_name" {
+  description = "RDS database name"
+  value       = module.rds.rds_db_name
+}
+
+output "db_subnet_group_name" {
+  description = "RDS subnet group name"
+  value       = module.rds.db_subnet_group_name
+}
+
+output "db_host_parameter_name" {
+  description = "SSM parameter name for DB host"
+  value       = module.ssm_parameter.db_host_parameter_name
+}
+
+output "db_name_parameter_name" {
+  description = "SSM parameter name for DB name"
+  value       = module.ssm_parameter.db_name_parameter_name
+}
+
+output "db_username_parameter_name" {
+  description = "SSM parameter name for DB username"
+  value       = module.ssm_parameter.db_username_parameter_name
+}
+
+
+output "db_port_parameter_name" {
+  description = "SSM parameter name for DB port"
+  value       = module.ssm_parameter.db_port_parameter_name
+}

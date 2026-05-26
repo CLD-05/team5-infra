@@ -125,45 +125,45 @@ variable "app_port" {
 # # RDS
 # # ------------------------------------------------------------------------------
 
-# variable "db_engine" {
-#   description = "RDS database engine"
-#   type        = string
-#   default     = "mysql"
-# }
+variable "db_engine" {
+  description = "RDS database engine"
+  type        = string
+  default     = "mysql"
+}
 
-# variable "db_engine_version" {
-#   description = "RDS database engine version"
-#   type        = string
-#   default     = "8.0"
-# }
+variable "db_engine_version" {
+  description = "RDS database engine version"
+  type        = string
+  default     = "8.0"
+}
 
-# variable "db_instance_class" {
-#   description = "RDS instance class"
-#   type        = string
-#   default     = "db.t3.micro"
-# }
+variable "db_instance_class" {
+  description = "RDS instance class"
+  type        = string
+  default     = "db.t3.micro"
+}
 
-# variable "db_allocated_storage" {
-#   description = "Allocated storage size for RDS in GB"
-#   type        = number
-#   default     = 20
-# }
+variable "db_allocated_storage" {
+  description = "Allocated storage size for RDS in GB"
+  type        = number
+  default     = 20
+}
 
-# variable "db_name" {
-#   description = "Initial database name"
-#   type        = string
-# }
+variable "db_name" {
+  description = "Initial database name"
+  type        = string
+}
 
-# variable "db_username" {
-#   description = "Master username for RDS"
-#   type        = string
-# }
+variable "db_username" {
+  description = "Master username for RDS"
+  type        = string
+}
 
-# variable "db_password" {
-#   description = "Master password for RDS. Do not commit real values to Git."
-#   type        = string
-#   sensitive   = true
-# }
+variable "db_password" {
+  description = "Master password for RDS. Do not commit real values to Git."
+  type        = string
+  sensitive   = true
+}
 
 variable "db_port" {
   description = "Database port"
@@ -171,45 +171,36 @@ variable "db_port" {
   default     = 3306
 }
 
-# variable "db_multi_az" {
-#   description = "Whether to enable Multi-AZ for RDS"
-#   type        = bool
-#   default     = false
-# }
+variable "db_multi_az" {
+  description = "Whether to enable Multi-AZ for RDS"
+  type        = bool
+  default     = false
+}
 
-# variable "db_publicly_accessible" {
-#   description = "Whether RDS is publicly accessible"
-#   type        = bool
-#   default     = false
-# }
+variable "db_publicly_accessible" {
+  description = "Whether RDS is publicly accessible"
+  type        = bool
+  default     = false
+}
 
-# variable "db_backup_retention_period" {
-#   description = "RDS backup retention period in days"
-#   type        = number
-#   default     = 1
-# }
+variable "db_backup_retention_period" {
+  description = "RDS backup retention period in days"
+  type        = number
+  default     = 1
+}
 
-# variable "db_deletion_protection" {
-#   description = "Whether to enable deletion protection for RDS"
-#   type        = bool
-#   default     = false
-# }
+variable "db_deletion_protection" {
+  description = "Whether to enable deletion protection for RDS"
+  type        = bool
+  default     = false
+}
 
-# variable "db_skip_final_snapshot" {
-#   description = "Whether to skip final snapshot when deleting RDS"
-#   type        = bool
-#   default     = true
-# }
+variable "db_skip_final_snapshot" {
+  description = "Whether to skip final snapshot when deleting RDS"
+  type        = bool
+  default     = true
+}
 
-# # ------------------------------------------------------------------------------
-# # SSM Parameter Store
-# # ------------------------------------------------------------------------------
-
-# variable "use_ssm_parameter_store" {
-#   description = "Whether to store DB connection information in SSM Parameter Store"
-#   type        = bool
-#   default     = true
-# }
 
 # # ------------------------------------------------------------------------------
 # # EKS
