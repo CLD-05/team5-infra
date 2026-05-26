@@ -55,6 +55,7 @@ module "security_group" {
 
   db_port  = var.db_port
   app_port = var.app_port
+  redis_port = var.redis_port
 
   tags = local.common_tags
 }
@@ -110,6 +111,8 @@ module "rds" {
   tags = local.common_tags
 }
 
+
+
 module "ssm_parameter" {
   source = "../../modules/ssm-parameter"
 
@@ -122,6 +125,35 @@ module "ssm_parameter" {
   db_port     = module.rds.rds_port
 
   tags = local.common_tags
+}
+
+# ------------------------------------------------------------------------------
+# ElastiCache Redis
+# ------------------------------------------------------------------------------
+
+module "elasticache" {
+  source = "../../modules/elasticache"
+
+  name_prefix = local.name_prefix
+
+  private_app_subnet_ids = module.network.private_app_subnet_ids
+  elasticache_sg_id      = module.security_group.elasticache_sg_id
+
+  redis_node_type                  = var.redis_node_type
+  redis_engine_version             = var.redis_engine_version
+  redis_port                       = var.redis_port
+  redis_num_cache_clusters         = var.redis_num_cache_clusters
+  redis_multi_az_enabled           = var.redis_multi_az_enabled
+  redis_automatic_failover_enabled = var.redis_automatic_failover_enabled
+  redis_at_rest_encryption_enabled = var.redis_at_rest_encryption_enabled
+  redis_transit_encryption_enabled = var.redis_transit_encryption_enabled
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.security_group,
+    module.network
+  ]
 }
 
 module "eks" {
