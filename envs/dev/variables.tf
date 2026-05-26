@@ -209,7 +209,7 @@ variable "db_skip_final_snapshot" {
 variable "eks_cluster_version" {
   description = "EKS Kubernetes version"
   type        = string
-  default     = "1.30"
+  default     = "1.33"
 }
 
 variable "eks_endpoint_public_access" {
