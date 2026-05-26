@@ -1,3 +1,7 @@
+# ------------------------------------------------------------------------------
+# ECR
+# ------------------------------------------------------------------------------
+
 output "ecr_repository_name" {
   description = "ECR repository name"
   value       = module.ecr.repository_name
@@ -7,6 +11,15 @@ output "ecr_repository_url" {
   description = "ECR repository URL"
   value       = module.ecr.repository_url
 }
+
+output "ecr_repository_arn" {
+  description = "ECR repository ARN"
+  value       = module.ecr.repository_arn
+}
+
+# ------------------------------------------------------------------------------
+# GitHub OIDC Role
+# ------------------------------------------------------------------------------
 
 output "github_actions_role_arn" {
   description = "GitHub Actions IAM Role ARN"
@@ -53,27 +66,52 @@ output "nat_gateway_ids" {
 }
 
 # ------------------------------------------------------------------------------
-# Bastion Host
+# Security Group
 # ------------------------------------------------------------------------------
-output "bastion_instance_id" {
-  description = "Bastion Host instance ID"
-  value       = module.bastion.bastion_instance_id
+
+output "alb_sg_id" {
+  description = "ALB Security Group ID"
+  value       = module.security_group.alb_sg_id
 }
 
-output "bastion_public_ip" {
-  description = "Bastion Host public IP"
-  value       = module.bastion.bastion_public_ip
+output "eks_cluster_sg_id" {
+  description = "EKS Cluster Security Group ID"
+  value       = module.security_group.eks_cluster_sg_id
 }
 
-output "bastion_private_ip" {
-  description = "Bastion Host private IP"
-  value       = module.bastion.bastion_private_ip
+output "eks_node_sg_id" {
+  description = "EKS Node Security Group ID"
+  value       = module.security_group.eks_node_sg_id
 }
 
+output "rds_sg_id" {
+  description = "RDS Security Group ID"
+  value       = module.security_group.rds_sg_id
+}
+
+output "bastion_sg_id" {
+  description = "Bastion Security Group ID. Prod does not create Bastion, so this is usually null."
+  value       = module.security_group.bastion_sg_id
+}
 
 # ------------------------------------------------------------------------------
-# RDS / SSM Parameter
+# IAM
 # ------------------------------------------------------------------------------
+
+output "eks_cluster_role_arn" {
+  description = "EKS Cluster IAM Role ARN"
+  value       = module.iam.eks_cluster_role_arn
+}
+
+output "eks_node_role_arn" {
+  description = "EKS Node IAM Role ARN"
+  value       = module.iam.eks_node_role_arn
+}
+
+# ------------------------------------------------------------------------------
+# RDS
+# ------------------------------------------------------------------------------
+
 output "rds_instance_id" {
   description = "RDS instance ID"
   value       = module.rds.rds_instance_id
@@ -104,6 +142,10 @@ output "db_subnet_group_name" {
   value       = module.rds.db_subnet_group_name
 }
 
+# ------------------------------------------------------------------------------
+# SSM Parameter Store
+# ------------------------------------------------------------------------------
+
 output "db_host_parameter_name" {
   description = "SSM parameter name for DB host"
   value       = module.ssm_parameter.db_host_parameter_name
@@ -119,15 +161,18 @@ output "db_username_parameter_name" {
   value       = module.ssm_parameter.db_username_parameter_name
 }
 
-
 output "db_port_parameter_name" {
   description = "SSM parameter name for DB port"
   value       = module.ssm_parameter.db_port_parameter_name
 }
 
+# 비밀번호 parameter 이름은 naming 규칙으로 관리하고, output으로 노출하지 않음.
+# 예: team5-petcarelog-prod-db-password
+
 # ------------------------------------------------------------------------------
 # EKS
 # ------------------------------------------------------------------------------
+
 output "eks_cluster_name" {
   description = "EKS cluster name"
   value       = module.eks.eks_cluster_name

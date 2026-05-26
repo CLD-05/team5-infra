@@ -1,19 +1,25 @@
-#RDS가 들어갈 DB 전용 서브넷 묶음
-resource "aws_db_subnet_group" "this" {
-  name        = "${var.name_prefix}-db-subnet-group"
+# ------------------------------------------------------------------------------
+# RDS Subnet Group (RDS가 들어갈 DB 전용 서브넷 묶음)
+# ------------------------------------------------------------------------------
+
+resource "aws_db_subnet_group" "main" {
+  name        = "${var.name_prefix}-rds-subnet-group"
   description = "DB subnet group for ${var.name_prefix}"
   # root main.tf에서 module.network.private_db_subnet_ids를 넘겨받는 값
   subnet_ids = var.private_db_subnet_ids
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-db-subnet-group"
+    Name = "${var.name_prefix}-rds-subnet-group"
   })
 }
 
-# 실제 DB 서버를 만드는 부분
-resource "aws_db_instance" "this" {
+# ------------------------------------------------------------------------------
+# RDS Instance (실제 DB 서버를 만드는 부분)
+# ------------------------------------------------------------------------------
+
+resource "aws_db_instance" "main" {
   # RDS 이름
-  identifier = "${var.name_prefix}-mysql"
+  identifier = "${var.name_prefix}-rds"
 
   # DB 엔진 설정
   engine         = var.db_engine
@@ -32,7 +38,7 @@ resource "aws_db_instance" "this" {
   port     = var.db_port
 
   # RDS가 들어갈 네트워크 위치
-  db_subnet_group_name = aws_db_subnet_group.this.name
+  db_subnet_group_name = aws_db_subnet_group.main.name
   # SG (SG 설정에 맞게 수정해야 함)
   vpc_security_group_ids = [var.rds_sg_id]
 
@@ -45,9 +51,12 @@ resource "aws_db_instance" "this" {
   deletion_protection     = var.db_deletion_protection
   skip_final_snapshot     = var.db_skip_final_snapshot
 
+  final_snapshot_identifier = "${var.name_prefix}-rds-final-snapshot"
+
   auto_minor_version_upgrade = true
+  copy_tags_to_snapshot      = true
 
   tags = merge(var.tags, {
-    Name = "${var.name_prefix}-mysql"
+    Name = "${var.name_prefix}-rds"
   })
 }

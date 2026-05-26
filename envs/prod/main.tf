@@ -1,3 +1,7 @@
+# ------------------------------------------------------------------------------
+# ECR
+# ------------------------------------------------------------------------------
+
 module "ecr" {
   source = "../../modules/ecr"
 
@@ -5,6 +9,10 @@ module "ecr" {
 
   tags = local.common_tags
 }
+
+# ------------------------------------------------------------------------------
+# GitHub OIDC Role
+# ------------------------------------------------------------------------------
 
 module "github_oidc_role" {
   source = "../../modules/github-oidc-role"
@@ -14,8 +22,9 @@ module "github_oidc_role" {
   role_name   = "${local.name_prefix}-github-actions-role"
   policy_name = "${local.name_prefix}-ecr-push-policy"
 
-  # dev에서 GitHub OIDC Provider 최초 생성
-  create_oidc_provider = true
+  # OIDC Provider는 AWS 계정에 1개만 있으면 됨.
+  # dev에서 이미 생성했다면 prod에서는 false.
+  create_oidc_provider = false
 
   github_sub_conditions = [
     "repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/${var.github_branch}"
@@ -28,10 +37,15 @@ module "github_oidc_role" {
   tags = local.common_tags
 }
 
+# ------------------------------------------------------------------------------
+# Network
+# ------------------------------------------------------------------------------
+
 module "network" {
   source = "../../modules/network"
 
-  name_prefix              = local.name_prefix
+  name_prefix = local.name_prefix
+
   vpc_cidr                 = var.vpc_cidr
   availability_zones       = var.availability_zones
   public_subnet_cidrs      = var.public_subnet_cidrs
@@ -43,6 +57,10 @@ module "network" {
 
   tags = local.common_tags
 }
+
+# ------------------------------------------------------------------------------
+# Security Group
+# ------------------------------------------------------------------------------
 
 module "security_group" {
   source = "../../modules/security-group"
@@ -59,6 +77,10 @@ module "security_group" {
   tags = local.common_tags
 }
 
+# ------------------------------------------------------------------------------
+# IAM
+# ------------------------------------------------------------------------------
+
 module "iam" {
   source = "../../modules/iam"
 
@@ -67,21 +89,9 @@ module "iam" {
   tags = local.common_tags
 }
 
-module "bastion" {
-  source = "../../modules/bastion"
-
-  name_prefix = local.name_prefix
-
-  enable_bastion = var.enable_bastion
-
-  public_subnet_id = module.network.public_subnet_ids[0]
-  bastion_sg_id    = module.security_group.bastion_sg_id
-
-  bastion_instance_type = var.bastion_instance_type
-  bastion_key_name      = var.bastion_key_name
-
-  tags = local.common_tags
-}
+# ------------------------------------------------------------------------------
+# RDS
+# ------------------------------------------------------------------------------
 
 module "rds" {
   source = "../../modules/rds"
@@ -110,6 +120,10 @@ module "rds" {
   tags = local.common_tags
 }
 
+# ------------------------------------------------------------------------------
+# SSM Parameter Store
+# ------------------------------------------------------------------------------
+
 module "ssm_parameter" {
   source = "../../modules/ssm-parameter"
 
@@ -123,6 +137,10 @@ module "ssm_parameter" {
 
   tags = local.common_tags
 }
+
+# ------------------------------------------------------------------------------
+# EKS
+# ------------------------------------------------------------------------------
 
 module "eks" {
   source = "../../modules/eks"
@@ -153,6 +171,10 @@ module "eks" {
     module.security_group
   ]
 }
+
+# ------------------------------------------------------------------------------
+# EKS Add-ons
+# ------------------------------------------------------------------------------
 
 module "eks_addons" {
   source = "../../modules/eks-addons"

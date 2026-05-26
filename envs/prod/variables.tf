@@ -1,44 +1,44 @@
+# ------------------------------------------------------------------------------
+# Common
+# ------------------------------------------------------------------------------
+
 variable "aws_region" {
-  description = "AWS region where resources will be created"
+  description = "AWS region"
   type        = string
+  default     = "ap-northeast-2"
 }
 
 variable "project_name" {
-  description = "Project name used for resource naming"
+  description = "Project name"
   type        = string
 }
 
 variable "environment" {
-  description = "Environment name. Must be dev or prod"
+  description = "Environment name"
   type        = string
-
-  validation {
-    condition     = contains(["dev", "prod"], var.environment)
-    error_message = "environment must be either dev or prod."
-  }
 }
 
 # ------------------------------------------------------------------------------
-# GitHub / CI
+# GitHub / OIDC
 # ------------------------------------------------------------------------------
 
 variable "github_owner" {
-  description = "GitHub organization or owner name"
+  description = "GitHub organization or owner"
   type        = string
 }
 
 variable "github_repo" {
-  description = "GitHub repository name that runs GitHub Actions"
+  description = "GitHub repository name"
   type        = string
 }
 
 variable "github_branch" {
-  description = "GitHub branch allowed to assume the GitHub Actions IAM role"
+  description = "GitHub branch allowed to assume role"
   type        = string
 }
 
 # ------------------------------------------------------------------------------
-# Network
+# VPC / Network
 # ------------------------------------------------------------------------------
 
 variable "vpc_cidr" {
@@ -47,7 +47,7 @@ variable "vpc_cidr" {
 }
 
 variable "availability_zones" {
-  description = "Availability zones used for subnet placement"
+  description = "Availability zones"
   type        = list(string)
 }
 
@@ -57,18 +57,14 @@ variable "public_subnet_cidrs" {
 }
 
 variable "private_app_subnet_cidrs" {
-  description = "Private application subnet CIDR blocks for EKS worker nodes and pods"
+  description = "Private app subnet CIDR blocks"
   type        = list(string)
 }
 
 variable "private_db_subnet_cidrs" {
-  description = "Private database subnet CIDR blocks for RDS subnet group"
+  description = "Private DB subnet CIDR blocks"
   type        = list(string)
 }
-
-# ------------------------------------------------------------------------------
-# NAT Gateway
-# ------------------------------------------------------------------------------
 
 variable "enable_nat_gateway" {
   description = "Whether to create NAT Gateway"
@@ -77,19 +73,25 @@ variable "enable_nat_gateway" {
 }
 
 variable "single_nat_gateway" {
-  description = "Whether to create only one NAT Gateway. For dev, true can reduce cost. For prod, false is recommended."
+  description = "Whether to create a single NAT Gateway"
   type        = bool
   default     = false
 }
 
-# # ------------------------------------------------------------------------------
-# # Bastion
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# Bastion
+# ------------------------------------------------------------------------------
 
 variable "enable_bastion" {
-  description = "Whether to create a Bastion Host. Usually true for dev and false for prod."
+  description = "Whether to create or allow Bastion Host access"
   type        = bool
-  default     = false # dev 환경은 true이고 prod 환경은 false
+  default     = false
+}
+
+variable "bastion_allowed_ssh_cidrs" {
+  description = "CIDR blocks allowed to access Bastion Host through SSH"
+  type        = list(string)
+  default     = []
 }
 
 variable "bastion_instance_type" {
@@ -98,32 +100,31 @@ variable "bastion_instance_type" {
   default     = "t3.micro"
 }
 
-variable "bastion_allowed_ssh_cidrs" {
-  description = "Bastion SSH 허용 CIDR (dev only)"
-  type        = list(string)
-  default     = []
-}
-
 variable "bastion_key_name" {
   description = "EC2 key pair name for Bastion Host SSH access"
   type        = string
   default     = null
 }
 
+# ------------------------------------------------------------------------------
+# Ports
+# ------------------------------------------------------------------------------
 
-# # ------------------------------------------------------------------------------
-# # APP
-# # ------------------------------------------------------------------------------
 variable "app_port" {
   description = "Application port"
   type        = number
   default     = 8080
 }
 
+variable "db_port" {
+  description = "Database port"
+  type        = number
+  default     = 3306
+}
 
-# # ------------------------------------------------------------------------------
-# # RDS
-# # ------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# RDS
+# ------------------------------------------------------------------------------
 
 variable "db_engine" {
   description = "RDS database engine"
@@ -165,16 +166,10 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "db_port" {
-  description = "Database port"
-  type        = number
-  default     = 3306
-}
-
 variable "db_multi_az" {
   description = "Whether to enable Multi-AZ for RDS"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "db_publicly_accessible" {
@@ -186,21 +181,20 @@ variable "db_publicly_accessible" {
 variable "db_backup_retention_period" {
   description = "RDS backup retention period in days"
   type        = number
-  default     = 1
+  default     = 7
 }
 
 variable "db_deletion_protection" {
   description = "Whether to enable deletion protection for RDS"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "db_skip_final_snapshot" {
   description = "Whether to skip final snapshot when deleting RDS"
   type        = bool
-  default     = true
+  default     = false
 }
-
 
 # ------------------------------------------------------------------------------
 # EKS
@@ -209,7 +203,7 @@ variable "db_skip_final_snapshot" {
 variable "eks_cluster_version" {
   description = "EKS Kubernetes version"
   type        = string
-  default     = "1.33"
+  default     = "1.30"
 }
 
 variable "eks_endpoint_public_access" {
@@ -255,12 +249,6 @@ variable "node_group_disk_size" {
 # EKS Add-ons
 # ------------------------------------------------------------------------------
 
-variable "enable_eks_addons" {
-  description = "Whether to enable default EKS add-ons"
-  type        = bool
-  default     = true
-}
-
 variable "eks_addons" {
   description = "List of EKS add-ons to install"
   type        = list(string)
@@ -271,5 +259,3 @@ variable "eks_addons" {
     "eks-pod-identity-agent"
   ]
 }
-
-
