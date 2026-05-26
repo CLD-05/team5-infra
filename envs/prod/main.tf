@@ -68,11 +68,15 @@ module "security_group" {
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
 
+  enable_alb_sg         = true
+  enable_rds_sg         = true
+  enable_elasticache_sg = true
+
   enable_bastion            = var.enable_bastion
   bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
 
-  db_port  = var.db_port
-  app_port = var.app_port
+  db_port    = var.db_port
+  app_port   = var.app_port
   redis_port = var.redis_port
 
   tags = local.common_tags

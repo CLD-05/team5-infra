@@ -18,26 +18,21 @@ github_branch = "main"
 # VPC / Network
 # ------------------------------------------------------------------------------
 
-vpc_cidr = "10.0.0.0/16"
-
-availability_zones = [
-  "ap-northeast-2a",
-  "ap-northeast-2c"
-]
+vpc_cidr = "10.1.0.0/16"
 
 public_subnet_cidrs = [
-  "10.0.100.0/24",
-  "10.0.101.0/24"
+  "10.1.1.0/24",
+  "10.1.2.0/24"
 ]
 
 private_app_subnet_cidrs = [
-  "10.0.110.0/24",
-  "10.0.111.0/24"
+  "10.1.11.0/24",
+  "10.1.12.0/24"
 ]
 
 private_db_subnet_cidrs = [
-  "10.0.130.0/24",
-  "10.0.131.0/24"
+  "10.1.21.0/24",
+  "10.1.22.0/24"
 ]
 
 enable_nat_gateway = true
@@ -107,3 +102,18 @@ eks_addons = [
   "kube-proxy",
   "eks-pod-identity-agent"
 ]
+
+# ------------------------------------------------------------------------------
+# ElastiCache Redis
+# ------------------------------------------------------------------------------
+
+redis_node_type      = "cache.t3.micro"
+redis_engine_version = "7.1"
+redis_port           = 6379
+
+redis_num_cache_clusters         = 2
+redis_multi_az_enabled           = true
+redis_automatic_failover_enabled = true
+
+redis_at_rest_encryption_enabled = true
+redis_transit_encryption_enabled = false

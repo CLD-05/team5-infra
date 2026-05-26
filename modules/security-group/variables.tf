@@ -44,3 +44,20 @@ variable "redis_port" {
   default     = 6379
 }
 
+variable "enable_alb_sg" {
+  description = "Whether to create ALB Security Group"
+  type        = bool
+  default     = true
+}
+
+variable "enable_rds_sg" {
+  description = "Whether to create RDS Security Group"
+  type        = bool
+  default     = true
+}
+
+variable "enable_elasticache_sg" {
+  description = "Whether to create ElastiCache Security Group"
+  type        = bool
+  default     = true
+}

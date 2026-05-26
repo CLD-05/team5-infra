@@ -2,16 +2,23 @@
 # ALB Security Group
 ##########################################################
 resource "aws_security_group" "alb" {
+  count = var.enable_alb_sg ? 1 : 0
+
   name        = "${var.name_prefix}-alb-sg"
-  description = "ALB Security Group"
+  description = "Security group for ALB"
   vpc_id      = var.vpc_id
-  tags        = merge(var.tags, { Name = "${var.name_prefix}-alb-sg" })
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-alb-sg"
+  })
 }
 
 resource "aws_security_group_rule" "alb_http_ingress" {
+  count = var.enable_alb_sg ? 1 : 0
+
   type              = "ingress"
   description       = "Allow HTTP from internet"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb[0].id
 
   from_port   = 80
   to_port     = 80
@@ -20,9 +27,11 @@ resource "aws_security_group_rule" "alb_http_ingress" {
 }
 
 resource "aws_security_group_rule" "alb_https_ingress" {
+  count = var.enable_alb_sg ? 1 : 0
+
   type              = "ingress"
   description       = "Allow HTTPS from internet"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb[0].id
 
   from_port   = 443
   to_port     = 443
@@ -31,9 +40,11 @@ resource "aws_security_group_rule" "alb_https_ingress" {
 }
 
 resource "aws_security_group_rule" "alb_egress_all" {
+  count = var.enable_alb_sg ? 1 : 0
+
   type              = "egress"
   description       = "Allow all outbound traffic"
-  security_group_id = aws_security_group.alb.id
+  security_group_id = aws_security_group.alb[0].id
 
   from_port   = 0
   to_port     = 0
@@ -130,10 +141,12 @@ resource "aws_security_group_rule" "eks_node_ingress_from_cluster_ephemeral" {
 }
 
 resource "aws_security_group_rule" "eks_node_ingress_from_alb_app" {
+  count = var.enable_alb_sg ? 1 : 0
+
   type                     = "ingress"
-  description              = "Allow ALB to access application port on worker nodes"
+  description              = "Allow application traffic from ALB"
   security_group_id        = aws_security_group.eks_node.id
-  source_security_group_id = aws_security_group.alb.id
+  source_security_group_id = aws_security_group.alb[0].id
 
   from_port = var.app_port
   to_port   = var.app_port
@@ -141,10 +154,12 @@ resource "aws_security_group_rule" "eks_node_ingress_from_alb_app" {
 }
 
 resource "aws_security_group_rule" "eks_node_ingress_from_alb_nodeport" {
+  count = var.enable_alb_sg ? 1 : 0
+
   type                     = "ingress"
-  description              = "Allow ALB to access Kubernetes NodePort range"
+  description              = "Allow NodePort traffic from ALB"
   security_group_id        = aws_security_group.eks_node.id
-  source_security_group_id = aws_security_group.alb.id
+  source_security_group_id = aws_security_group.alb[0].id
 
   from_port = 30000
   to_port   = 32767
@@ -167,8 +182,10 @@ resource "aws_security_group_rule" "eks_node_egress_all" {
 ##########################################################
 
 resource "aws_security_group" "rds" {
+  count = var.enable_rds_sg ? 1 : 0
+
   name        = "${var.name_prefix}-rds-sg"
-  description = "Security group for RDS MySQL"
+  description = "Security group for RDS"
   vpc_id      = var.vpc_id
 
   tags = merge(var.tags, {
@@ -177,9 +194,11 @@ resource "aws_security_group" "rds" {
 }
 
 resource "aws_security_group_rule" "rds_ingress_from_eks_node" {
+  count = var.enable_rds_sg ? 1 : 0
+
   type                     = "ingress"
   description              = "Allow MySQL access from EKS worker nodes"
-  security_group_id        = aws_security_group.rds.id
+  security_group_id        = aws_security_group.rds[0].id
   source_security_group_id = aws_security_group.eks_node.id
 
   from_port = var.db_port
@@ -189,11 +208,11 @@ resource "aws_security_group_rule" "rds_ingress_from_eks_node" {
 
 # dev 환경에서만 Bastion → RDS 허용
 resource "aws_security_group_rule" "rds_ingress_from_bastion" {
-  count = var.enable_bastion ? 1 : 0
+  count = var.enable_rds_sg && var.enable_bastion ? 1 : 0
 
   type                     = "ingress"
   description              = "Allow MySQL access from Bastion Host"
-  security_group_id        = aws_security_group.rds.id
+  security_group_id        = aws_security_group.rds[0].id
   source_security_group_id = aws_security_group.bastion[0].id
 
   from_port = var.db_port
@@ -202,9 +221,11 @@ resource "aws_security_group_rule" "rds_ingress_from_bastion" {
 }
 
 resource "aws_security_group_rule" "rds_egress_all" {
+  count = var.enable_rds_sg ? 1 : 0
+
   type              = "egress"
   description       = "Allow all outbound traffic"
-  security_group_id = aws_security_group.rds.id
+  security_group_id = aws_security_group.rds[0].id
 
   from_port   = 0
   to_port     = 0
@@ -217,6 +238,8 @@ resource "aws_security_group_rule" "rds_egress_all" {
 # ------------------------------------------------------------------------------
 
 resource "aws_security_group" "elasticache" {
+  count = var.enable_elasticache_sg ? 1 : 0
+
   name        = "${var.name_prefix}-elasticache-sg"
   description = "Security group for ElastiCache Redis"
   vpc_id      = var.vpc_id
@@ -227,9 +250,11 @@ resource "aws_security_group" "elasticache" {
 }
 
 resource "aws_security_group_rule" "elasticache_ingress_from_eks_node" {
+  count = var.enable_elasticache_sg ? 1 : 0
+
   type                     = "ingress"
   description              = "Allow Redis access from EKS worker nodes"
-  security_group_id        = aws_security_group.elasticache.id
+  security_group_id        = aws_security_group.elasticache[0].id
   source_security_group_id = aws_security_group.eks_node.id
 
   from_port = var.redis_port
@@ -238,9 +263,11 @@ resource "aws_security_group_rule" "elasticache_ingress_from_eks_node" {
 }
 
 resource "aws_security_group_rule" "elasticache_egress_all" {
+  count = var.enable_elasticache_sg ? 1 : 0
+
   type              = "egress"
   description       = "Allow all outbound traffic"
-  security_group_id = aws_security_group.elasticache.id
+  security_group_id = aws_security_group.elasticache[0].id
 
   from_port   = 0
   to_port     = 0

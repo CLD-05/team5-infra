@@ -36,11 +36,6 @@ output "nat_gateway_ids" {
 # Security Group
 # ------------------------------------------------------------------------------
 
-output "alb_sg_id" {
-  description = "ALB Security Group ID"
-  value       = module.security_group.alb_sg_id
-}
-
 output "eks_cluster_sg_id" {
   description = "EKS Cluster Security Group ID"
   value       = module.security_group.eks_cluster_sg_id
@@ -51,20 +46,6 @@ output "eks_node_sg_id" {
   value       = module.security_group.eks_node_sg_id
 }
 
-output "rds_sg_id" {
-  description = "RDS Security Group ID. Management does not use RDS, but SG may be created by common security module."
-  value       = module.security_group.rds_sg_id
-}
-
-output "elasticache_sg_id" {
-  description = "ElastiCache Security Group ID. Management does not use Redis, but SG may be created by common security module."
-  value       = module.security_group.elasticache_sg_id
-}
-
-output "bastion_sg_id" {
-  description = "Bastion Security Group ID. Management does not create Bastion, so this is usually null."
-  value       = module.security_group.bastion_sg_id
-}
 
 # ------------------------------------------------------------------------------
 # IAM

@@ -29,8 +29,12 @@ module "security_group" {
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
 
-  enable_bastion            = var.enable_bastion
-  bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
+  enable_alb_sg         = false
+  enable_rds_sg         = false
+  enable_elasticache_sg = false
+
+  enable_bastion            = false
+  bastion_allowed_ssh_cidrs = []
 
   db_port    = var.db_port
   app_port   = var.app_port
