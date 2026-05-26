@@ -123,3 +123,46 @@ module "ssm_parameter" {
 
   tags = local.common_tags
 }
+
+module "eks" {
+  source = "../../modules/eks"
+
+  name_prefix = local.name_prefix
+
+  private_app_subnet_ids = module.network.private_app_subnet_ids
+
+  eks_cluster_role_arn = module.iam.eks_cluster_role_arn
+  eks_node_role_arn    = module.iam.eks_node_role_arn
+
+  eks_cluster_sg_id = module.security_group.eks_cluster_sg_id
+
+  eks_cluster_version         = var.eks_cluster_version
+  eks_endpoint_public_access  = var.eks_endpoint_public_access
+  eks_endpoint_private_access = var.eks_endpoint_private_access
+
+  node_group_instance_types = var.node_group_instance_types
+  node_group_desired_size   = var.node_group_desired_size
+  node_group_min_size       = var.node_group_min_size
+  node_group_max_size       = var.node_group_max_size
+  node_group_disk_size      = var.node_group_disk_size
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.iam,
+    module.security_group
+  ]
+}
+
+module "eks_addons" {
+  source = "../../modules/eks-addons"
+
+  eks_cluster_name = module.eks.eks_cluster_name
+  eks_addons       = var.eks_addons
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks
+  ]
+}
