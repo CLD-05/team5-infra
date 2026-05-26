@@ -183,6 +183,7 @@ module "eks" {
   eks_cluster_version         = var.eks_cluster_version
   eks_endpoint_public_access  = var.eks_endpoint_public_access
   eks_endpoint_private_access = var.eks_endpoint_private_access
+  eks_node_sg_id = module.security_group.eks_node_sg_id
 
   node_group_instance_types = var.node_group_instance_types
   node_group_desired_size   = var.node_group_desired_size

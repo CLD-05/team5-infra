@@ -43,3 +43,4 @@ variable "redis_port" {
   type        = number
   default     = 6379
 }
+
