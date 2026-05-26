@@ -211,11 +211,6 @@ variable "db_port" {
 # # EKS
 # # ------------------------------------------------------------------------------
 
-variable "eks_cluster_version" {
-  description = "EKS Kubernetes version"
-  type        = string
-  default     = "1.30"
-}
 
 variable "eks_endpoint_public_access" {
   description = "Whether to enable public access to the EKS cluster endpoint"
@@ -287,4 +282,15 @@ variable "eks_addons" {
     "kube-proxy",
     "eks-pod-identity-agent"
   ]
+}
+variable "petcarelog_namespace" {
+  description = "Kubernetes namespace for PetCareLog"
+  type        = string
+  default     = "petcarelog"
+}
+
+variable "petcarelog_service_account_name" {
+  description = "Kubernetes ServiceAccount name"
+  type        = string
+  default     = "petcarelog-sa"
 }

@@ -76,29 +76,20 @@ output "nat_gateway_ids" {
   description = "NAT Gateway IDs"
   value       = module.network.nat_gateway_ids
 }
+output "petcarelog_irsa_role_arn" {
+  description = "PetCareLog IRSA IAM Role ARN"
+  value       = module.irsa.irsa_role_arn
+}
+
+output "eks_oidc_provider_arn" {
+  description = "EKS OIDC Provider ARN"
+  value       = module.irsa.oidc_provider_arn
+}
 
 # ------------------------------------------------------------------------------
-# EKS
+# EKS ADDON
 # ------------------------------------------------------------------------------
-output "eks_cluster_name" {
-  description = "EKS cluster name"
-  value       = module.eks.eks_cluster_name
-}
 
-output "eks_cluster_arn" {
-  description = "EKS cluster ARN"
-  value       = module.eks.eks_cluster_arn
-}
-
-output "eks_cluster_endpoint" {
-  description = "EKS cluster endpoint"
-  value       = module.eks.eks_cluster_endpoint
-}
-
-output "eks_node_group_name" {
-  description = "EKS managed node group name"
-  value       = module.eks.eks_node_group_name
-}
 
 output "eks_addon_names" {
   description = "EKS add-on names"

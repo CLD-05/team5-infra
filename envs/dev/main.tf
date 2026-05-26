@@ -73,12 +73,11 @@ module "eks" {
   name_prefix            = local.name_prefix
   private_app_subnet_ids = module.network.private_app_subnet_ids
 
-  eks_cluster_role_arn = module.security_iam.eks_cluster_role_arn
-  eks_node_role_arn    = module.security_iam.eks_node_role_arn
+  eks_cluster_role_arn = module.iam.eks_cluster_role_arn
+  eks_node_role_arn    = module.iam.eks_node_role_arn
 
-  eks_cluster_sg_id = module.security_iam.eks_cluster_sg_id
-  eks_node_sg_id    = module.security_iam.eks_node_sg_id
-
+  eks_cluster_sg_id   = module.security_group.eks_cluster_sg_id
+  eks_node_sg_id      = module.security_group.eks_node_sg_id
   eks_cluster_version = var.eks_cluster_version
 
   node_group_instance_types = ["t3.medium"]
@@ -88,6 +87,18 @@ module "eks" {
   node_group_disk_size      = 20
 
   tags = local.common_tags
+}
+
+module "irsa" {
+  source = "../../modules/irsa"
+
+  name_prefix = local.name_prefix
+  tags        = local.common_tags
+
+  cluster_oidc_issuer_url = module.eks.cluster_oidc_issuer_url
+
+  namespace            = var.petcarelog_namespace
+  service_account_name = var.petcarelog_service_account_name
 }
 
 module "eks_addons" {
