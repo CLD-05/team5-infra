@@ -22,3 +22,8 @@ output "bastion_sg_id" {
   description = "Bastion Security Group ID"
   value       = var.enable_bastion ? aws_security_group.bastion[0].id : null
 }
+
+output "elasticache_sg_id" {
+  description = "ElastiCache Redis Security Group ID"
+  value       = aws_security_group.elasticache.id
+}

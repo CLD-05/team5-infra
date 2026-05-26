@@ -37,3 +37,9 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "redis_port" {
+  description = "Redis port"
+  type        = number
+  default     = 6379
+}

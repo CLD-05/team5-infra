@@ -152,3 +152,47 @@ output "eks_addon_names" {
   description = "EKS add-on names"
   value       = module.eks_addons.eks_addon_names
 }
+
+# ------------------------------------------------------------------------------
+# ElastiCache Redis
+# ------------------------------------------------------------------------------
+
+output "elasticache_sg_id" {
+  description = "ElastiCache Redis Security Group ID"
+  value       = module.security_group.elasticache_sg_id
+}
+
+output "redis_replication_group_id" {
+  description = "ElastiCache Redis replication group ID"
+  value       = module.elasticache.redis_replication_group_id
+}
+
+output "redis_primary_endpoint_address" {
+  description = "ElastiCache Redis primary endpoint address"
+  value       = module.elasticache.redis_primary_endpoint_address
+}
+
+output "redis_reader_endpoint_address" {
+  description = "ElastiCache Redis reader endpoint address"
+  value       = module.elasticache.redis_reader_endpoint_address
+}
+
+output "redis_port" {
+  description = "ElastiCache Redis port"
+  value       = module.elasticache.redis_port
+}
+
+output "redis_subnet_group_name" {
+  description = "ElastiCache Redis subnet group name"
+  value       = module.elasticache.redis_subnet_group_name
+}
+
+output "redis_host_parameter_name" {
+  description = "SSM parameter name for Redis host"
+  value       = module.elasticache.redis_host_parameter_name
+}
+
+output "redis_port_parameter_name" {
+  description = "SSM parameter name for Redis port"
+  value       = module.elasticache.redis_port_parameter_name
+}

@@ -212,6 +212,43 @@ resource "aws_security_group_rule" "rds_egress_all" {
   cidr_blocks = ["0.0.0.0/0"]
 }
 
+# ------------------------------------------------------------------------------
+# ElastiCache Redis Security Group
+# ------------------------------------------------------------------------------
+
+resource "aws_security_group" "elasticache" {
+  name        = "${var.name_prefix}-elasticache-sg"
+  description = "Security group for ElastiCache Redis"
+  vpc_id      = var.vpc_id
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-elasticache-sg"
+  })
+}
+
+resource "aws_security_group_rule" "elasticache_ingress_from_eks_node" {
+  type                     = "ingress"
+  description              = "Allow Redis access from EKS worker nodes"
+  security_group_id        = aws_security_group.elasticache.id
+  source_security_group_id = aws_security_group.eks_node.id
+
+  from_port = var.redis_port
+  to_port   = var.redis_port
+  protocol  = "tcp"
+}
+
+resource "aws_security_group_rule" "elasticache_egress_all" {
+  type              = "egress"
+  description       = "Allow all outbound traffic"
+  security_group_id = aws_security_group.elasticache.id
+
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+}
+
+
 ##########################################################
 # Bastion Security Group (dev only)
 ##########################################################
