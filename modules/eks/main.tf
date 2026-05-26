@@ -1,4 +1,7 @@
-resource "aws_eks_cluster" "this" {
+# ------------------------------------------------------------------------------
+# EKS Cluster
+# ------------------------------------------------------------------------------
+resource "aws_eks_cluster" "main" {
   name     = "${var.name_prefix}-eks"
   role_arn = var.eks_cluster_role_arn
   version  = var.eks_cluster_version
@@ -7,8 +10,8 @@ resource "aws_eks_cluster" "this" {
     subnet_ids         = var.private_app_subnet_ids
     security_group_ids = [var.eks_cluster_sg_id]
 
-    endpoint_private_access = true
-    endpoint_public_access  = true
+    endpoint_private_access = var.eks_endpoint_public_access
+    endpoint_public_access  = var.eks_endpoint_private_access
   }
 
   tags = merge(
@@ -19,8 +22,12 @@ resource "aws_eks_cluster" "this" {
   )
 }
 
-resource "aws_eks_node_group" "this" {
-  cluster_name    = aws_eks_cluster.this.name
+# ------------------------------------------------------------------------------
+# EKS Managed Node Group
+# ------------------------------------------------------------------------------
+
+resource "aws_eks_node_group" "main" {
+  cluster_name    = aws_eks_cluster.main.name
   node_group_name = "${var.name_prefix}-eks-node-group"
   node_role_arn   = var.eks_node_role_arn
   subnet_ids      = var.private_app_subnet_ids
@@ -44,8 +51,4 @@ resource "aws_eks_node_group" "this" {
       Name = "${var.name_prefix}-eks-node-group"
     }
   )
-
-  depends_on = [
-    aws_eks_cluster.this
-  ]
 }

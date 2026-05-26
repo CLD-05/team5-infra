@@ -23,14 +23,23 @@ variable "eks_cluster_sg_id" {
   type        = string
 }
 
-variable "eks_node_sg_id" {
-  description = "Security group ID for EKS worker nodes"
-  type        = string
-}
+
 
 variable "eks_cluster_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
+}
+
+variable "eks_endpoint_public_access" {
+  description = "Whether to enable public access to the EKS cluster endpoint"
+  type        = bool
+  default     = true
+}
+
+variable "eks_endpoint_private_access" {
+  description = "Whether to enable private access to the EKS cluster endpoint"
+  type        = bool
+  default     = true
 }
 
 variable "node_group_instance_types" {
