@@ -34,9 +34,8 @@
 
 ---
 
-# Project Architecture
 
-## Infrastructure Stack
+## 인프라 구성 요소
 
 - AWS VPC
 - Public / Private Subnet
@@ -53,7 +52,7 @@
 
 ---
 
-# Repository Structure
+# 프로젝트 구조 
 
 ```text
 team5-infra
@@ -75,7 +74,7 @@ team5-infra
 
 ---
 
-# Environment Configuration
+# 환경 구성 
 
 ## dev
 
@@ -103,8 +102,6 @@ team5-infra
 ---
 
 # Naming Convention
-
-모든 AWS 리소스는 아래 규칙을 사용합니다.
 
 ```text
 team5-${project_name}-${environment}-${resource_type}
@@ -179,7 +176,7 @@ private db:
 
 ---
 
-# Stack
+# 기술 스택 요약 
 
 | Category      | Technology           |
 | ------------- | -------------------- |
