@@ -1,0 +1,142 @@
+
+# 아래 3가지를 개인 환경에 맞게 수정해주면 됩니다.!
+# db_password = "실제_DB_비밀번호"
+# bastion_allowed_ssh_cidrs = ["본인_공인IP/32"]
+# bastion_key_name = "본인_keypair_이름"
+
+
+# ------------------------------------------------------------------------------
+# Common
+# ------------------------------------------------------------------------------
+
+aws_region   = "ap-northeast-2"
+project_name = "petcarelog"
+environment  = "dev"
+
+# ------------------------------------------------------------------------------
+# GitHub / CI
+# ------------------------------------------------------------------------------
+
+github_owner  = "CLD-05"
+github_repo   = "team5-app"
+github_branch = "dev"
+
+# ------------------------------------------------------------------------------
+# Network
+# ------------------------------------------------------------------------------
+
+vpc_cidr = "10.0.0.0/16"
+
+availability_zones = [
+  "ap-northeast-2a",
+  "ap-northeast-2c"
+]
+
+public_subnet_cidrs = [
+  "10.0.1.0/24",
+  "10.0.2.0/24"
+]
+
+private_app_subnet_cidrs = [
+  "10.0.11.0/24",
+  "10.0.12.0/24"
+]
+
+private_db_subnet_cidrs = [
+  "10.0.21.0/24",
+  "10.0.22.0/24"
+]
+
+# ------------------------------------------------------------------------------
+# NAT Gateway
+# ------------------------------------------------------------------------------
+
+enable_nat_gateway = true
+
+# dev에서는 비용 절감을 위해 true로 바꿀 수 있음
+# true  = NAT Gateway 1개
+# false = AZ별 NAT Gateway 생성 (dev 환경은 true)
+single_nat_gateway = true
+
+# ------------------------------------------------------------------------------
+# Bastion
+# ------------------------------------------------------------------------------
+
+enable_bastion        = true
+bastion_instance_type = "t3.micro"
+
+# 본인 또는 팀원 공인 IP만 /32로 입력
+# 예: ["1.2.3.4/32"]
+bastion_allowed_ssh_cidrs = []
+
+# AWS EC2 Key Pair 이름
+# 예: "team5-petcarelog-dev-key"
+bastion_key_name = null
+
+# ------------------------------------------------------------------------------
+# RDS
+# ------------------------------------------------------------------------------
+
+db_engine         = "mysql"
+db_engine_version = "8.0"
+db_instance_class = "db.t3.micro"
+
+db_allocated_storage = 20
+db_name              = "petcarelog_dev"
+db_username          = "petcarelog"
+
+# 실제 비밀번호는 terraform.tfvars에만 작성하고 GitHub에 올리지 말 것
+db_password = "CHANGE_ME_DEV_PASSWORD"
+
+db_port                    = 3306
+db_multi_az                = false
+db_publicly_accessible     = false
+db_backup_retention_period = 1
+db_deletion_protection     = false
+db_skip_final_snapshot     = true
+
+
+
+# ------------------------------------------------------------------------------
+# EKS
+# ------------------------------------------------------------------------------
+
+eks_cluster_version         = "1.33"
+eks_endpoint_public_access  = true
+eks_endpoint_private_access = true
+
+node_group_instance_types = [
+  "t3.medium"
+]
+
+node_group_desired_size = 2
+node_group_min_size     = 1
+node_group_max_size     = 3
+node_group_disk_size    = 20
+
+# ------------------------------------------------------------------------------
+# EKS Add-ons
+# ------------------------------------------------------------------------------
+
+
+eks_addons = [
+  "vpc-cni",
+  "coredns",
+  "kube-proxy",
+  "eks-pod-identity-agent"
+]
+
+# ------------------------------------------------------------------------------
+# ElastiCache Redis
+# ------------------------------------------------------------------------------
+
+redis_node_type      = "cache.t3.micro"
+redis_engine_version = "7.1"
+redis_port           = 6379
+
+redis_num_cache_clusters         = 1
+redis_multi_az_enabled           = false
+redis_automatic_failover_enabled = false
+
+redis_at_rest_encryption_enabled = true
+redis_transit_encryption_enabled = false
