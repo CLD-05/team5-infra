@@ -95,11 +95,7 @@ db_backup_retention_period = 1
 db_deletion_protection     = false
 db_skip_final_snapshot     = true
 
-# ------------------------------------------------------------------------------
-# SSM Parameter Store
-# ------------------------------------------------------------------------------
 
-use_ssm_parameter_store = true
 
 # ------------------------------------------------------------------------------
 # EKS
@@ -122,7 +118,6 @@ node_group_disk_size    = 20
 # EKS Add-ons
 # ------------------------------------------------------------------------------
 
-enable_eks_addons = true
 
 eks_addons = [
   "vpc-cni",

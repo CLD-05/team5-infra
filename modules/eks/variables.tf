@@ -74,3 +74,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "eks_node_sg_id" {
+  description = "Security Group ID for EKS worker nodes"
+  type        = string
+}

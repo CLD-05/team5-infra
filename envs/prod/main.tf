@@ -68,11 +68,15 @@ module "security_group" {
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
 
+  enable_alb_sg         = true
+  enable_rds_sg         = true
+  enable_elasticache_sg = true
+
   enable_bastion            = var.enable_bastion
   bastion_allowed_ssh_cidrs = var.bastion_allowed_ssh_cidrs
 
-  db_port  = var.db_port
-  app_port = var.app_port
+  db_port    = var.db_port
+  app_port   = var.app_port
   redis_port = var.redis_port
 
   tags = local.common_tags
@@ -183,6 +187,7 @@ module "eks" {
   eks_cluster_version         = var.eks_cluster_version
   eks_endpoint_public_access  = var.eks_endpoint_public_access
   eks_endpoint_private_access = var.eks_endpoint_private_access
+  eks_node_sg_id = module.security_group.eks_node_sg_id
 
   node_group_instance_types = var.node_group_instance_types
   node_group_desired_size   = var.node_group_desired_size

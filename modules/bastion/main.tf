@@ -47,4 +47,8 @@ resource "aws_instance" "bastion" {
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-bastion"
   })
+
+  volume_tags = merge(var.tags, {
+  Name = "${var.name_prefix}-bastion-root-volume"
+})
 }
