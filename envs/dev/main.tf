@@ -118,6 +118,8 @@ module "rds" {
 
 
 
+
+
 module "ssm_parameter" {
   source = "../../modules/ssm-parameter"
 
@@ -161,6 +163,19 @@ module "elasticache" {
   ]
 }
 
+
+module "s3_images" {
+  source = "../../modules/s3"
+
+  name_prefix = local.name_prefix
+
+  bucket_name   = var.s3_bucket_name
+  image_prefix  = var.s3_image_prefix
+  force_destroy = var.s3_force_destroy
+
+  tags = local.common_tags
+}
+
 module "eks" {
   source = "../../modules/eks"
 
@@ -191,6 +206,32 @@ module "eks" {
     module.security_group
   ]
 }
+
+
+
+module "irsa_app_s3" {
+  source = "../../modules/irsa-app-s3"
+
+  name_prefix = local.name_prefix
+
+  oidc_provider_arn = module.eks.eks_oidc_provider_arn
+  oidc_provider_url = module.eks.eks_oidc_provider_url
+
+  namespace            = "petcarelog-dev"
+  service_account_name = var.app_service_account_name
+
+  bucket_name  = module.s3_images.bucket_name
+  bucket_arn   = module.s3_images.bucket_arn
+  image_prefix = module.s3_images.image_prefix
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks,
+    module.s3_images
+  ]
+}
+
 
 module "irsa_alb_controller" {
   source = "../../modules/irsa-alb-controller"
