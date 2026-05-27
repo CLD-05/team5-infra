@@ -17,7 +17,6 @@ resource "aws_security_group_rule" "alb_http_ingress" {
   count = var.enable_alb_sg ? 1 : 0
 
   type              = "ingress"
-  description       = "Allow HTTP from internet"
   security_group_id = aws_security_group.alb[0].id
 
   from_port   = 80
@@ -144,7 +143,6 @@ resource "aws_security_group_rule" "eks_node_ingress_from_alb_app" {
   count = var.enable_alb_sg ? 1 : 0
 
   type                     = "ingress"
-  description              = "Allow application traffic from ALB"
   security_group_id        = aws_security_group.eks_node.id
   source_security_group_id = aws_security_group.alb[0].id
 
@@ -157,7 +155,6 @@ resource "aws_security_group_rule" "eks_node_ingress_from_alb_nodeport" {
   count = var.enable_alb_sg ? 1 : 0
 
   type                     = "ingress"
-  description              = "Allow NodePort traffic from ALB"
   security_group_id        = aws_security_group.eks_node.id
   source_security_group_id = aws_security_group.alb[0].id
 

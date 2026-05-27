@@ -14,8 +14,8 @@ module "github_oidc_role" {
   role_name   = "${local.name_prefix}-github-actions-role"
   policy_name = "${local.name_prefix}-ecr-push-policy"
 
-  # dev에서 GitHub OIDC Provider 최초 생성
-  create_oidc_provider = true
+  
+  create_oidc_provider = false
 
   github_sub_conditions = [
     "repo:${var.github_owner}/${var.github_repo}:ref:refs/heads/${var.github_branch}"
@@ -50,7 +50,7 @@ module "security_group" {
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
 
-  enable_alb_sg         = true
+  enable_alb_sg         = false
   enable_rds_sg         = true
   enable_elasticache_sg = true
 
@@ -71,6 +71,7 @@ module "iam" {
 
   tags = local.common_tags
 }
+
 
 module "bastion" {
   source = "../../modules/bastion"
@@ -188,6 +189,25 @@ module "eks" {
   depends_on = [
     module.iam,
     module.security_group
+  ]
+}
+
+module "irsa_alb_controller" {
+  source = "../../modules/irsa-alb-controller"
+
+  name_prefix = local.name_prefix
+
+  eks_cluster_name  = module.eks.eks_cluster_name
+  oidc_provider_arn = module.eks.eks_oidc_provider_arn
+  oidc_provider_url = module.eks.eks_oidc_provider_url
+
+  namespace            = "kube-system"
+  service_account_name = "aws-load-balancer-controller"
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks
   ]
 }
 

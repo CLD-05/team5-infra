@@ -34,6 +34,17 @@ resource "aws_launch_template" "eks_node" {
     var.eks_node_sg_id
   ]
 
+  block_device_mappings {
+    device_name = "/dev/xvda"
+
+    ebs {
+      volume_size           = var.node_group_disk_size
+      volume_type           = "gp3"
+      delete_on_termination = true
+      encrypted             = true
+    }
+  }
+
   tag_specifications {
     resource_type = "instance"
 
@@ -80,5 +91,31 @@ resource "aws_eks_node_group" "main" {
 
   tags = merge(var.tags, {
     Name = "${var.name_prefix}-node-group"
+  })
+}
+
+
+
+# ------------------------------------------------------------------------------
+# EKS OIDC Provider for IRSA
+# ------------------------------------------------------------------------------
+
+data "tls_certificate" "eks_oidc" {
+  url = aws_eks_cluster.main.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks" {
+  url = aws_eks_cluster.main.identity[0].oidc[0].issuer
+
+  client_id_list = [
+    "sts.amazonaws.com"
+  ]
+
+  thumbprint_list = [
+    data.tls_certificate.eks_oidc.certificates[0].sha1_fingerprint
+  ]
+
+  tags = merge(var.tags, {
+    Name = "${var.name_prefix}-eks-oidc-provider"
   })
 }

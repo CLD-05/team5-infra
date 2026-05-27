@@ -106,3 +106,16 @@ module "eks_addons" {
     module.eks
   ]
 }
+
+# ------------------------------------------------------------------------------
+# Github OIDC Provider
+# ------------------------------------------------------------------------------
+
+
+module "github_oidc_provider" {
+  source = "../../modules/github-oidc-provider"
+
+  name_prefix = local.name_prefix
+
+  tags = local.common_tags
+}

@@ -22,8 +22,7 @@ module "github_oidc_role" {
   role_name   = "${local.name_prefix}-github-actions-role"
   policy_name = "${local.name_prefix}-ecr-push-policy"
 
-  # OIDC Provider는 AWS 계정에 1개만 있으면 됨.
-  # dev에서 이미 생성했다면 prod에서는 false.
+  
   create_oidc_provider = false
 
   github_sub_conditions = [
@@ -68,7 +67,7 @@ module "security_group" {
   name_prefix = local.name_prefix
   vpc_id      = module.network.vpc_id
 
-  enable_alb_sg         = true
+  enable_alb_sg         = false
   enable_rds_sg         = true
   enable_elasticache_sg = true
 
@@ -81,6 +80,8 @@ module "security_group" {
 
   tags = local.common_tags
 }
+
+
 
 # ------------------------------------------------------------------------------
 # IAM
@@ -169,6 +170,22 @@ module "elasticache" {
 }
 
 # ------------------------------------------------------------------------------
+# S3 Image Bucket
+# ------------------------------------------------------------------------------
+
+module "s3_images" {
+  source = "../../modules/s3"
+
+  name_prefix = local.name_prefix
+
+  bucket_name   = var.s3_bucket_name
+  image_prefix  = var.s3_image_prefix
+  force_destroy = var.s3_force_destroy
+
+  tags = local.common_tags
+}
+
+# ------------------------------------------------------------------------------
 # EKS
 # ------------------------------------------------------------------------------
 
@@ -200,6 +217,53 @@ module "eks" {
   depends_on = [
     module.iam,
     module.security_group
+  ]
+}
+
+# ------------------------------------------------------------------------------
+# IRSA for PetCareLog App S3 Access
+# ------------------------------------------------------------------------------
+
+module "irsa_app_s3" {
+  source = "../../modules/irsa-app-s3"
+
+  name_prefix = local.name_prefix
+
+  oidc_provider_arn = module.eks.eks_oidc_provider_arn
+  oidc_provider_url = module.eks.eks_oidc_provider_url
+
+  namespace            = "petcarelog-prod"
+  service_account_name = var.app_service_account_name
+
+  bucket_name  = module.s3_images.bucket_name
+  bucket_arn   = module.s3_images.bucket_arn
+  image_prefix = module.s3_images.image_prefix
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks,
+    module.s3_images
+  ]
+}
+
+
+module "irsa_alb_controller" {
+  source = "../../modules/irsa-alb-controller"
+
+  name_prefix = local.name_prefix
+
+  eks_cluster_name  = module.eks.eks_cluster_name
+  oidc_provider_arn = module.eks.eks_oidc_provider_arn
+  oidc_provider_url = module.eks.eks_oidc_provider_url
+
+  namespace            = "kube-system"
+  service_account_name = "aws-load-balancer-controller"
+
+  tags = local.common_tags
+
+  depends_on = [
+    module.eks
   ]
 }
 

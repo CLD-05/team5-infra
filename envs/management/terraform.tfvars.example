@@ -32,12 +32,6 @@ private_db_subnet_cidrs = [
   "10.2.22.0/24"
 ]
 
-# management에서는 DB를 사용하지 않지만,
-# 기존 network 모듈 구조를 맞추기 위해 생성
-private_db_subnet_cidrs = [
-  "10.2.20.0/24",
-  "10.2.21.0/24"
-]
 
 enable_nat_gateway = true
 

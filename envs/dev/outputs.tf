@@ -196,3 +196,9 @@ output "redis_port_parameter_name" {
   description = "SSM parameter name for Redis port"
   value       = module.elasticache.redis_port_parameter_name
 }
+
+# alb
+output "alb_controller_irsa_role_arn" {
+  description = "AWS Load Balancer Controller IRSA Role ARN"
+  value       = module.irsa_alb_controller.role_arn
+}

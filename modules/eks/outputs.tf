@@ -27,3 +27,17 @@ output "eks_node_group_arn" {
   description = "EKS managed node group ARN"
   value       = aws_eks_node_group.main.arn
 }
+
+output "eks_cluster_oidc_issuer_url" {
+  description = "EKS cluster OIDC issuer URL"
+  value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
+}
+output "eks_oidc_provider_arn" {
+  description = "EKS OIDC provider ARN"
+  value       = aws_iam_openid_connect_provider.eks.arn
+}
+
+output "eks_oidc_provider_url" {
+  description = "EKS OIDC provider URL without https://"
+  value       = replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")
+}

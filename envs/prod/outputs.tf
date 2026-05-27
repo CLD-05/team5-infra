@@ -69,10 +69,6 @@ output "nat_gateway_ids" {
 # Security Group
 # ------------------------------------------------------------------------------
 
-output "alb_sg_id" {
-  description = "ALB Security Group ID"
-  value       = module.security_group.alb_sg_id
-}
 
 output "eks_cluster_sg_id" {
   description = "EKS Cluster Security Group ID"
@@ -240,4 +236,34 @@ output "redis_host_parameter_name" {
 output "redis_port_parameter_name" {
   description = "SSM parameter name for Redis port"
   value       = module.elasticache.redis_port_parameter_name
+}
+
+# alb
+output "alb_controller_irsa_role_arn" {
+  description = "AWS Load Balancer Controller IRSA Role ARN"
+  value       = module.irsa_alb_controller.role_arn
+}
+
+# ------------------------------------------------------------------------------
+# S3 Image Bucket / App IRSA
+# ------------------------------------------------------------------------------
+
+output "s3_image_bucket_name" {
+  description = "S3 image bucket name"
+  value       = module.s3_images.bucket_name
+}
+
+output "s3_image_bucket_arn" {
+  description = "S3 image bucket ARN"
+  value       = module.s3_images.bucket_arn
+}
+
+output "s3_image_prefix" {
+  description = "S3 image prefix"
+  value       = module.s3_images.image_prefix
+}
+
+output "app_s3_irsa_role_arn" {
+  description = "PetCareLog app S3 IRSA Role ARN"
+  value       = module.irsa_app_s3.role_arn
 }

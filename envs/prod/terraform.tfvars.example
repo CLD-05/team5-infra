@@ -20,6 +20,11 @@ github_branch = "main"
 
 vpc_cidr = "10.1.0.0/16"
 
+availability_zones = [
+  "ap-northeast-2a",
+  "ap-northeast-2c"
+]
+
 public_subnet_cidrs = [
   "10.1.1.0/24",
   "10.1.2.0/24"

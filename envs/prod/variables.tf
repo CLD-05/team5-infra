@@ -203,7 +203,7 @@ variable "db_skip_final_snapshot" {
 variable "eks_cluster_version" {
   description = "EKS Kubernetes version"
   type        = string
-  default     = "1.30"
+  default     = "1.33"
 }
 
 variable "eks_endpoint_public_access" {
@@ -310,4 +310,32 @@ variable "redis_transit_encryption_enabled" {
   description = "Whether Redis in-transit encryption is enabled"
   type        = bool
   default     = false
+}
+
+# ------------------------------------------------------------------------------
+# S3 Image Bucket
+# ------------------------------------------------------------------------------
+
+variable "s3_bucket_name" {
+  description = "S3 bucket name for pet images"
+  type        = string
+  default     = null
+}
+
+variable "s3_image_prefix" {
+  description = "S3 prefix for pet images"
+  type        = string
+  default     = "pets"
+}
+
+variable "s3_force_destroy" {
+  description = "Whether to force destroy S3 bucket"
+  type        = bool
+  default     = false
+}
+
+variable "app_service_account_name" {
+  description = "Kubernetes ServiceAccount name for PetCareLog app"
+  type        = string
+  default     = "petcarelog-app-sa"
 }
